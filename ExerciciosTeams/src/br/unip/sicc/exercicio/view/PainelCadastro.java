@@ -3,6 +3,7 @@ package br.unip.sicc.exercicio.view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,7 +22,7 @@ public class PainelCadastro extends JPanel{
 	
 	//Construtor PainelCadastro():
 	//instanciar = new
-   private PainelCadastro() {
+  public PainelCadastro() {
 	   this.setLayout(new BorderLayout());
 	   JPanel painelCadastro = montaPainelCadastro();
 	   JPanel painelBotoes =  montaPainelBotoes();
@@ -39,8 +40,8 @@ public class PainelCadastro extends JPanel{
 	      painelCadastro.setLayout(layout);
 	      
 	      lblld = new JLabel("id");
-	      textld = new JTextField("id");
-	      setEnabled(false);
+	      textld = new JTextField();
+	      textld.setEnabled(false);
 	      lblNome = new JLabel("Nome");
 	      textNome = new JTextField("Nome");
 	      //Configurar a largura visível do campo de texto txtNome para 10 colunas.
@@ -56,8 +57,20 @@ public class PainelCadastro extends JPanel{
 
    private JPanel montaPainelBotoes()  {
 	   JPanel painelBotoes = new JPanel();
-	   FlowLayout layout = new FlowLayout.RIGHT;
-	   return null;
+	   FlowLayout layout = new FlowLayout(FlowLayout.RIGHT);
+	   painelBotoes.setLayout(layout);
+	   
+	   btnSalvar = new JButton("Salvar");
+	   btnCancelar = new JButton("Cancelar");
+	   
+	   // Define a tecla 'C' como atalho (Alt + C)
+       btnCancelar.setMnemonic(KeyEvent.VK_C);
+	   
+	   painelBotoes.add(btnSalvar);
+	   painelBotoes.add(btnCancelar);
+	   
+	   
+	   return painelBotoes;
    }
    
 }
