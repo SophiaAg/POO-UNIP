@@ -10,7 +10,7 @@ import javax.swing.SwingUtilities;
 public class JanelaBorderLayout extends JFrame {
 	private JPanel painelCadastro;
 	private JPanel painelBusca;
-	
+
 	private JanelaBorderLayout() {
 		//Definir o título da janela
 		this.setTitle("Controle de Cartas");
@@ -20,28 +20,28 @@ public class JanelaBorderLayout extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//centralizar a janela 
 		this.setLocationRelativeTo(null);
-		
+
 		painelCadastro = montaPainelCadastro();
 		painelBusca = montaPainelBusca();
-		
+
 		this.add(painelCadastro, BorderLayout.WEST);
 		this.add(painelBusca, BorderLayout.CENTER);
-		
+
 	}
-	
+
 	private JPanel montaPainelBusca() {
 		JPanel painelBusca = new JPanel();
 		painelBusca.setBackground(Color.WHITE);
-		return painelBusca;
-		
+		return new PainelBusca();
+
 	}
-	
+
 	private JPanel montaPainelCadastro() {
 		JPanel painelCadastro = new JPanel();
 		painelCadastro.setBackground(Color.BLACK);
 		return new PainelCadastro();
 	}
-	
+
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
 			new JanelaBorderLayout().setVisible(true);
