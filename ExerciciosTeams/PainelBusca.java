@@ -19,7 +19,7 @@ public class PainelBusca extends JPanel {
     //Configurar o gerenciador
         this.setLayout(new BorderLayout());
         JPanel painelFiltro =  montaPainelFiltro();
-        JTable painelTabela = montaPainelTabela();
+        JPanel painelTabela = montaPainelTabela();
         JPanel painelBotoes = montaPainelBotoes();
 
         this.add(painelFiltro, BorderLayout.NORTH);
@@ -45,13 +45,32 @@ public class PainelBusca extends JPanel {
         return painelFiltro;
     }
 
-    private JTable montaPainelTabela(){
-        JTable tabela = new JTable();//intanciar, criar objeto
+    private JPanel montaPainelTabela(){
+        JPanel painelTabela = new JPanel();
 
-        return tabela;
+        tabela = new JTable();//intanciar, criar objeto
+        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        //Envelopar a tabela dentro de um JScrollPane e retornar essa barra de rolagem.
+        JScrollPane scroll = new JScrollPane(tabela);//configurando o o JScrollPane
+        painelTabela.add(scroll);//aqui retona essa barra na tabela
+
+        return painelTabela;
     }
 
     private JPanel montaPainelBotoes(){
+        JPanel painelBotoes = new JPanel();
+        FlowLayout layout = new FlowLayout(FlowLayout.RIGHT);
+        painelBotoes.setLayout(layout);
+
+        btnSelecionar = new JButton("Selecionar");
+        //mnemônico 'S' (KeyEvent.VK_S).
+        btnSelecionar.setMnemonic(KeyEvent.VK_S);
+        btnExcluir = new JButton("Excluir");
+        //mnemônico 'X' (KeyEvent.VK_X).
+        btnExcluir.setMnemonic(KeyEvent.VK_X);
+
+        painelBotoes.add(btnSelecionar);
+        painelBotoes.add(btnExcluir);
 
         return painelBotoes;
     }
