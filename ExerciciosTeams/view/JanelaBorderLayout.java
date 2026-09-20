@@ -7,7 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class JanelaBorderLayout extends JFrame {
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+public class JanelaBorderLayout extends JFrame implements WindowListener {
 	private JPanel painelCadastro;
 	private JPanel painelBusca;
 
@@ -16,10 +19,12 @@ public class JanelaBorderLayout extends JFrame {
 		this.setTitle("Controle de Cartas");
 		//Configurar a dimensão
 		this.setSize(800, 300);
-		// encerramento do processo ao fechar 
+		// encerramento do processo ao fechar
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//centralizar a janela 
+		//centralizar a janela
 		this.setLocationRelativeTo(null);
+		//ouvinte de seus eventos de janela
+		this.addWindowListener(this);
 
 		painelCadastro = montaPainelCadastro();
 		painelBusca = montaPainelBusca();
@@ -45,5 +50,47 @@ public class JanelaBorderLayout extends JFrame {
 		SwingUtilities.invokeLater(() -> {
 			new JanelaBorderLayout().setVisible(true);
 		});
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		System.out.println("MINIMIZOU");
+
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }
