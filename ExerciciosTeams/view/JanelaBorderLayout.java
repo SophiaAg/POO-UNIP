@@ -3,6 +3,7 @@ package br.unip.sicc.exercicio.view.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -35,13 +36,13 @@ public class JanelaBorderLayout extends JFrame implements WindowListener {
 	}
 
 	private JPanel montaPainelBusca() {
-		JPanel painelBusca = new PainelBusca();
+		JPanel painelBusca =PainelBusca.getInstance();
 		painelBusca.setBackground(Color.RED);
 		return painelBusca;
 	}
 
 	private JPanel montaPainelCadastro() {
-		JPanel painelCadastro = new PainelCadastro();
+		JPanel painelCadastro = PainelCadastro.getInstance();
 		painelCadastro.setBackground(Color.BLACK);
 		return painelCadastro;
 	}

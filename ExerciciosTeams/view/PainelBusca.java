@@ -18,9 +18,18 @@ public class PainelBusca extends JPanel {
     private JButton btnExcluir;
     private JTable tabela;
     private ArtefatoList repository = new ArtefatoList();
+    private static PainelBusca instance;
+
+    public static PainelBusca getInstance(){
+        if(instance == null){
+            instance = new PainelBusca();
+        }
+        return instance;
+    }
+
 
     //Construtor PainelBusca()
-    public PainelBusca(){
+    private PainelBusca(){
     //Configurar o gerenciador
         this.setLayout(new BorderLayout());
         JPanel painelFiltro =  montaPainelFiltro();

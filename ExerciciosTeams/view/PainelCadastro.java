@@ -22,9 +22,18 @@ public class PainelCadastro extends JPanel{
 	private JButton btnSalvar;
 	private JButton btnCancelar;
 
+	private static PainelCadastro instance;
+
+	public static PainelCadastro getInstance() {
+		if (instance == null) {
+			instance = new PainelCadastro();
+		}
+		return instance;
+	}
+
 	//Construtor PainelCadastro():
 	//instanciar = new
-	public PainelCadastro() {
+	private PainelCadastro() {
 		this.setLayout(new BorderLayout());
 		JPanel painelCadastro = montaPainelCadastro();
 		JPanel painelBotoes =  montaPainelBotoes();
@@ -97,5 +106,4 @@ public class PainelCadastro extends JPanel{
 	}
 
 }
-
 
