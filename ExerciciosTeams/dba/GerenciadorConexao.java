@@ -50,13 +50,13 @@ public class GerenciadorConexao {
 
 	public static void fechar(Connection connection, PreparedStatement statement, ResultSet rst) throws DadosException {
 		try {
-			if (statement != null) {
-				statement.close();
+			if (rst != null) {
+				rst.close();
 			}
 		} catch (SQLException ex) {
 			throw new DadosException("Não foi possivel desconectar ao banco de dados", ex);
 		} finally {
-			fechar(connection);
+			fechar(connection, statement);
 		}
 	}
 }

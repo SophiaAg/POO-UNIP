@@ -15,6 +15,7 @@ public class TesteConexao {
 	public static void main(String[] args) throws Exception {
 		testarAberturaEFechamento();
 		testarSenhaInvalida();
+		testarGetPorIdArtefato();
 		//testarGetTodosArtefatos();
 		//testarAtualizarArtefato();
 		//testarInclusaoArtefato();
@@ -66,6 +67,42 @@ public class TesteConexao {
 		for (Artefato artefato : artefatos) {
 			System.out.println(artefato);
 		}
+	}
+
+	private static void testarGetPorIdArtefato() throws DadosException {
+		ArtefatoJdbc dao = new ArtefatoJdbc();
+		List<Artefato> artefatos = dao.getTodos();
+
+		if (!artefatos.isEmpty()) {
+			Artefato esperado = artefatos.get(0);
+			Artefato encontrado = dao.getPorId(esperado.getId());
+			if (!esperado.equals(encontrado)) {
+				throw new AssertionError("O artefato retornado não corresponde ao registro com ID "
+						+ esperado.getId());
+			}
+			System.out.println("Consulta por ID existente: " + encontrado);
+		} else {
+			System.out.println("Sem registros para testar a consulta por ID existente.");
+		}
+
+		long idInexistente = 99999L;
+		boolean idJaExiste = true;
+		while (idJaExiste) {
+			idJaExiste = false;
+			for (Artefato artefato : artefatos) {
+				if (artefato.getId().equals(idInexistente)) {
+					idInexistente++;
+					idJaExiste = true;
+					break;
+				}
+			}
+		}
+
+		Artefato naoEncontrado = dao.getPorId(idInexistente);
+		if (naoEncontrado != null) {
+			throw new AssertionError("Era esperado null para o ID inexistente " + idInexistente);
+		}
+		System.out.println("Consulta por ID inexistente (" + idInexistente + ") retornou null.");
 	}
 
 	private static void testarInclusaoArtefato() throws DadosException {

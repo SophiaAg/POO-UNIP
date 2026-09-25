@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ArtefatoJdbc implements ArtefatoDao {
@@ -22,8 +21,8 @@ public class ArtefatoJdbc implements ArtefatoDao {
             "UPDATE TB_ARTEFATO SET NOME = ?, CATEGORIA = ? , NOME_IMAGEM = ? , FORCA = ? WHERE ID = ?";
     private static final String SQL_CONSULTAR =
             "SELECT ID, NOME, CATEGORIA, NOME_IMAGEM, FORCA FROM TB_ARTEFATO";
-
-
+    private static final String SQL_CONSULTAR_POR_ID =
+            "SELECT ID, NOME, CATEGORIA, NOME_IMAGEM, FORCA FROM TB_ARTEFATO WHERE ID = ?;";
     @Override
     public void atualizar(Artefato artefato) throws DadosException {
         Connection connection = null;
@@ -96,7 +95,30 @@ public class ArtefatoJdbc implements ArtefatoDao {
 
     @Override
     public Artefato getPorId(Long id) throws DadosException {
-        return null;
+        Artefato artefato = null;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rst = null;
+        try {
+            connection = GerenciadorConexao.getConnection();
+            statement = connection.prepareStatement(SQL_CONSULTAR_POR_ID);
+            statement.setLong(1, id);
+            rst = statement.executeQuery();
+            if (rst.next()) {
+                long artefatoId = rst.getLong("ID");
+                String nome = rst.getString("NOME");
+                String categoriaStr = rst.getString("CATEGORIA");
+                Categoria categoria = Categoria.valueOf(categoriaStr);
+                String nomeImagem = rst.getString("NOME_IMAGEM");
+                int forca = rst.getInt("FORCA");
+                artefato = new Artefato(artefatoId, nome, categoria, nomeImagem, forca);
+            }
+        } catch (SQLException e) {
+            throw new DadosException("Não foi possível selecionar", e);
+        } finally {
+            GerenciadorConexao.fechar(connection, statement, rst);
+        }
+        return artefato;
     }
 
     @Override
