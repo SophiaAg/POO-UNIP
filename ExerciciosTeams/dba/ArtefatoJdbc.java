@@ -23,6 +23,8 @@ public class ArtefatoJdbc implements ArtefatoDao {
             "SELECT ID, NOME, CATEGORIA, NOME_IMAGEM, FORCA FROM TB_ARTEFATO";
     private static final String SQL_CONSULTAR_POR_ID =
             "SELECT ID, NOME, CATEGORIA, NOME_IMAGEM, FORCA FROM TB_ARTEFATO WHERE ID = ?;";
+    private static final String SQL_CONSULTAR_POR_CATEGORIA =
+            "SELECT ID, NOME, CATEGORIA, NOME_IMAGEM, FORCA FROM TB_ARTEFATO WHERE CATEGORIA = ?;";
     @Override
     public void atualizar(Artefato artefato) throws DadosException {
         Connection connection = null;
@@ -123,7 +125,29 @@ public class ArtefatoJdbc implements ArtefatoDao {
 
     @Override
     public List<Artefato> getPorCategoria(Categoria categoria) throws DadosException {
-        return null;
+        List<Artefato> listaArtefatos = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rst = null;
+        try {
+            connection = GerenciadorConexao.getConnection();
+            statement = connection.prepareStatement(SQL_CONSULTAR_POR_CATEGORIA);
+            statement.setString(1, categoria.name());
+            rst = statement.executeQuery();
+            while (rst.next()) {
+                long id = rst.getLong("ID");
+                String nome = rst.getString("NOME");
+                String nomeImagem = rst.getString("NOME_IMAGEM");
+                int forca = rst.getInt("FORCA");
+                Artefato artefato = new Artefato(id, nome, categoria, nomeImagem, forca);
+                listaArtefatos.add(artefato);
+            }
+        } catch (SQLException e) {
+            throw new DadosException("Não foi possível selecionar", e);
+        } finally {
+            GerenciadorConexao.fechar(connection, statement, rst);
+        }
+        return listaArtefatos;
     }
 
     @Override

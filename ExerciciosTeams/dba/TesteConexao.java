@@ -15,6 +15,7 @@ public class TesteConexao {
 	public static void main(String[] args) throws Exception {
 		testarAberturaEFechamento();
 		testarSenhaInvalida();
+		testarGetPorCategoriaArtefato();
 		testarGetPorIdArtefato();
 		//testarGetTodosArtefatos();
 		//testarAtualizarArtefato();
@@ -103,6 +104,60 @@ public class TesteConexao {
 			throw new AssertionError("Era esperado null para o ID inexistente " + idInexistente);
 		}
 		System.out.println("Consulta por ID inexistente (" + idInexistente + ") retornou null.");
+	}
+
+	private static void testarGetPorCategoriaArtefato() throws DadosException {
+		ArtefatoJdbc dao = new ArtefatoJdbc();
+		List<Artefato> todos = dao.getTodos();
+		Categoria categoriaComRegistros = null;
+		Categoria categoriaSemRegistros = null;
+
+		for (Categoria categoria : Categoria.values()) {
+			boolean possuiRegistros = false;
+			for (Artefato artefato : todos) {
+				if (artefato.getCategoria() == categoria) {
+					possuiRegistros = true;
+					break;
+				}
+			}
+
+			if (possuiRegistros && categoriaComRegistros == null) {
+				categoriaComRegistros = categoria;
+			} else if (!possuiRegistros && categoriaSemRegistros == null) {
+				categoriaSemRegistros = categoria;
+			}
+		}
+
+		if (categoriaComRegistros == null) {
+			throw new AssertionError("Não há artefatos para testar a consulta por categoria existente.");
+		}
+
+		List<Artefato> encontrados = dao.getPorCategoria(categoriaComRegistros);
+		if (encontrados == null || encontrados.isEmpty()) {
+			throw new AssertionError("A consulta deveria encontrar artefatos da categoria "
+					+ categoriaComRegistros);
+		}
+		for (Artefato artefato : encontrados) {
+			if (artefato.getCategoria() != categoriaComRegistros) {
+				throw new AssertionError("A consulta retornou um artefato de outra categoria: " + artefato);
+			}
+		}
+		System.out.println("Consulta por categoria existente (" + categoriaComRegistros
+				+ ") retornou " + encontrados.size() + " artefato(s).");
+
+		if (categoriaSemRegistros == null) {
+			System.out.println("Teste de categoria sem registros não executado: todas as categorias do enum "
+					+ "possuem artefatos no banco.");
+			return;
+		}
+
+		List<Artefato> vazia = dao.getPorCategoria(categoriaSemRegistros);
+		if (vazia == null || !vazia.isEmpty()) {
+			throw new AssertionError("Era esperada uma lista vazia para a categoria "
+					+ categoriaSemRegistros);
+		}
+		System.out.println("Consulta por categoria sem registros (" + categoriaSemRegistros
+				+ ") retornou uma lista vazia.");
 	}
 
 	private static void testarInclusaoArtefato() throws DadosException {
