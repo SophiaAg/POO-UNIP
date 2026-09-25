@@ -10,8 +10,8 @@ import java.sql.Statement;
 public class GerenciadorConexao {
 	private static final String Servidor = "127.0.0.1";
 	private static final String Porta = "3306";
-	private static final String Schema = "sakila";//dps mudar para o meu
-	private static final String URL = "jdbc:mysql://127.0.0.1:3306/academico";
+	private static final String Schema = "jogo";//dps mudar para o meu
+	private static final String URL = "jdbc:mysql://127.0.0.1:3306/jogo";
 	private static final String Usuario = "root";//dps mudar para o meu
 	private static final String Senha = "R@oberto2";//dps mudar para o meu
 
