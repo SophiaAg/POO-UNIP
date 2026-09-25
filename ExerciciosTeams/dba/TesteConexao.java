@@ -8,13 +8,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class TesteConexao {
 
 	public static void main(String[] args) throws Exception {
 		testarAberturaEFechamento();
 		testarSenhaInvalida();
-		testarAtualizarArtefato();
+		//testarGetTodosArtefatos();
+		//testarAtualizarArtefato();
 		//testarInclusaoArtefato();
 		//testarExclusaoArtefato();
 		System.out.println("Testes de conexão concluídos com sucesso.");
@@ -46,6 +48,23 @@ public class TesteConexao {
 			if (ex.getCause() == null) {
 				throw new AssertionError("A SQLException original não foi preservada", ex);
 			}
+		}
+	}
+
+	private static void testarGetTodosArtefatos() throws DadosException {
+		List<Artefato> artefatos = new ArtefatoJdbc().getTodos();
+
+		if (artefatos == null) {
+			throw new AssertionError("getTodos() não deveria retornar null");
+		}
+
+		if (artefatos.isEmpty()) {
+			System.out.println("Nenhum artefato encontrado.");
+			return;
+		}
+
+		for (Artefato artefato : artefatos) {
+			System.out.println(artefato);
 		}
 	}
 

@@ -7,7 +7,10 @@ import br.unip.sicc.exercicio.view.view.DadosException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ArtefatoJdbc implements ArtefatoDao {
@@ -17,6 +20,8 @@ public class ArtefatoJdbc implements ArtefatoDao {
             "DELETE FROM TB_ARTEFATO WHERE ID = ?;";
     private static final String SQL_ATUALIZAR =
             "UPDATE TB_ARTEFATO SET NOME = ?, CATEGORIA = ? , NOME_IMAGEM = ? , FORCA = ? WHERE ID = ?";
+    private static final String SQL_CONSULTAR =
+            "SELECT ID, NOME, CATEGORIA, NOME_IMAGEM, FORCA FROM TB_ARTEFATO";
 
 
     @Override
@@ -101,6 +106,31 @@ public class ArtefatoJdbc implements ArtefatoDao {
 
     @Override
     public List<Artefato> getTodos() throws DadosException {
-        return null;
+        List<Artefato> listaArtefatos = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet rst = null;
+
+        try {
+            connection = GerenciadorConexao.getConnection();
+            statement = connection.prepareStatement(SQL_CONSULTAR);
+            rst = statement.executeQuery();
+            while (rst.next()){
+                long id = rst.getLong("ID");
+                String nome = rst.getString("NOME");
+                String categoriaStr = rst.getString("CATEGORIA");
+                Categoria categoria = Categoria.valueOf(categoriaStr);
+                String nomeImagem = rst.getString("NOME_IMAGEM");
+                int forca = rst.getInt("FORCA");
+                Artefato artefato = new Artefato(id, nome, categoria, nomeImagem, forca);
+                listaArtefatos.add(artefato);
+            }
+        } catch (SQLException e) {
+            throw new DadosException("Não foi possível selecionar" , e);
+        }finally {
+            GerenciadorConexao.fechar(connection, statement, rst);
+        }
+        return listaArtefatos;
+
     }
 }

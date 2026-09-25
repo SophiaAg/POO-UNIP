@@ -2,10 +2,7 @@ package br.unip.sicc.exercicio.view.dba;
 
 import br.unip.sicc.exercicio.view.view.DadosException;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class GerenciadorConexao {
 	private static final String Servidor = "127.0.0.1";
@@ -40,6 +37,18 @@ public class GerenciadorConexao {
 	}
 
 	public static void fechar(Connection connection, Statement statement) throws DadosException {
+		try {
+			if (statement != null) {
+				statement.close();
+			}
+		} catch (SQLException ex) {
+			throw new DadosException("Não foi possivel desconectar ao banco de dados", ex);
+		} finally {
+			fechar(connection);
+		}
+	}
+
+	public static void fechar(Connection connection, PreparedStatement statement, ResultSet rst) throws DadosException {
 		try {
 			if (statement != null) {
 				statement.close();
