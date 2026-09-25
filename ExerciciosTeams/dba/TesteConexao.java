@@ -14,7 +14,8 @@ public class TesteConexao {
 	public static void main(String[] args) throws Exception {
 		testarAberturaEFechamento();
 		testarSenhaInvalida();
-		testarInclusaoArtefato();
+		testarAtualizarArtefato();
+		//testarInclusaoArtefato();
 		//testarExclusaoArtefato();
 		System.out.println("Testes de conexão concluídos com sucesso.");
 	}
@@ -59,6 +60,20 @@ public class TesteConexao {
 
 		new ArtefatoJdbc().incluir(artefato);
 		System.out.println("Artefato incluído com sucesso: " + nome);
+	}
+
+	private static void testarAtualizarArtefato() throws DadosException {
+		String nome = "Artefato Atualizado ";
+		Artefato artefato = new Artefato(
+                8L,
+				nome,
+				Categoria.ATAQUE,
+				"artefato-teste.png",
+				7
+		);
+
+		new ArtefatoJdbc().atualizar(artefato);
+		System.out.println("Artefato atualizado com sucesso: " + nome);
 	}
 
 	private static void testarExclusaoArtefato() throws DadosException, SQLException {

@@ -15,10 +15,33 @@ public class ArtefatoJdbc implements ArtefatoDao {
             "INSERT INTO TB_ARTEFATO (NOME, CATEGORIA, NOME_IMAGEM, FORCA) VALUES (?, ?, ?, ?)";
     private static final String SQL_EXCLUIR =
             "DELETE FROM TB_ARTEFATO WHERE ID = ?;";
+    private static final String SQL_ATUALIZAR =
+            "UPDATE TB_ARTEFATO SET NOME = ?, CATEGORIA = ? , NOME_IMAGEM = ? , FORCA = ? WHERE ID = ?";
+
 
     @Override
     public void atualizar(Artefato artefato) throws DadosException {
+        Connection connection = null;
+        PreparedStatement statement = null;
 
+        try {
+            connection = GerenciadorConexao.getConnection();
+            statement = connection.prepareStatement(SQL_ATUALIZAR);
+            statement.setString(1, artefato.getNome());
+            statement.setString(2, artefato.getCategoria().name());
+            statement.setString(3, artefato.getNomeImagem());
+            statement.setInt(4, artefato.getForca());
+            statement.setLong(5, artefato.getId());
+            int registrosAtualizados = statement.executeUpdate();
+            if (registrosAtualizados == 0) {
+                throw new DadosException("Nenhum artefato foi atualizado");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException( "Não foi possível atualizar", e);
+        }finally {
+            GerenciadorConexao.fechar(connection, statement);
+        }
     }
 
     @Override
